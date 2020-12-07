@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+*::after,*::before {
+  box-sizing: border-box;
+}
+ul,
+li {
+  list-style: none;
+}
+
+#app1{
+    padding:100px 100px;
+    font-size: 24px;
+}
+#app1 .actions{
+    margin-top: 30px;
+}
+#app1 .actions>button{
+    padding: 10px 20px;
+}
+.page{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.page > section{
+    height: 50vh;
+    width: 50%;
+    border: 1px solid red;
+}
+#app2 .tab-bar {
+  height: 40px;
+  display: flex;
+}
+#app2 .tab-bar > li {
+  width: 50%;
+  border: 3px solid blue;
+}
+#app2 .tab-bar > li.section {
+  background-color: blue;
+  color: white;
+}
+#app2 .tab-content li {
+  display: none;
+}
+#app2 .tab-content li.active {
+  display: block;
+}
+
+#app3 .square{
+    width: 100px;
+    height: 100px;
+    margin-top: 120px;
+    margin-left: 100px;
+    background-color: brown;
+    transition: transform 1s linear;
+}
+
+#app3 .square.active{
+    transform: translateX(250px);
+}
+#app4 {
+  padding: 100px;
+}
+#app4 .round {
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+@keyframes change {
+  0% {
+    background-color: red;
+  }
+  100% {
+    background-color:blue;
+  }
+}
+#app4 .round.active {
+  animation: change 1s infinite linear alternate;
+}
+
+
+/*# sourceMappingURL=main.93e5f0db.css.map */

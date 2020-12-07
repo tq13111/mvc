@@ -1,0 +1,10 @@
+#app1{
+    padding:100px 100px;
+    font-size: 24px;
+}
+#app1 .actions{
+    margin-top: 30px;
+}
+#app1 .actions>button{
+    padding: 10px 20px;
+}

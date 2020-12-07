@@ -1,0 +1,10 @@
+.page{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.page > section{
+    height: 50vh;
+    width: 50%;
+    border: 1px solid red;
+}
