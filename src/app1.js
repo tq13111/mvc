@@ -1,46 +1,57 @@
 import "./app1.css";
 import $ from "jquery";
-const app1 =`<section id="app1">
-<div class="output">
-  <span id="number">100</span>
-</div>
-<div class="actions">
-  <button id="add1">+1</button>
-  <button id="minus1">-1</button>
-  <button id="mul2">*2</button>
-  <button id="division2">/2</button>
-</div>
-</section>`
-$(app1).appendTo($("body>.page"))
-const $button1 = $("#add1");
-const $button2 = $("#minus1");
-const $button3 = $("#mul2");
-const $button4 = $("#division2");
-const $number = $("#number");
-const localKey = $("app1.n");
-const n = localStorage.getItem(localKey);
-$number.text(n || 100);
-$button1.on("click", () => {
-  let n = parseInt($number.text());
-  n += 1;
-  localStorage.setItem(localKey, n);
-  $number.text(n);
+import Model from "./base/Model";
+import View from "./base/view";
+
+const m = new Model({
+  data: {
+    n: parseFloat(localStorage.getItem("n")) || 100,
+  },
+  updata(data) {
+    Object.assign(m.data, data);
+    this.trigger("m:updatad");
+    localStorage.setItem("n", data.n);
+  },
 });
-$button2.on("click", () => {
-  let n = parseInt($number.text());
-  n -= 1;
-  localStorage.setItem(localKey, n);
-  $number.text(n);
-});
-$button3.on("click", () => {
-  let n = parseInt($number.text());
-  n *= 2;
-  localStorage.setItem(localKey, n);
-  $number.text(n);
-});
-$button4.on("click", () => {
-  let n = parseInt($number.text());
-  n /= 2;
-  localStorage.setItem(localKey, n);
-  $number.text(n);
-});
+
+const c = (el) => {
+  new View({
+    el: el,
+    data: m.data,
+    html: `<div>
+      <div class="output">
+        <span id="number">{{n}}</span>
+      </div>
+      <div class="actions">
+        <button id="add1">+1</button>
+        <button id="minus1">-1</button>
+        <button id="mul2">*2</button>
+        <button id="division2">/2</button>
+      </div>
+      </div>
+     `,
+    render() {
+      if (this.el.length !== 0) this.el.empty();
+      $(this.html.replace("{{n}}", m.data.n)).appendTo($(this.el));
+    },
+    events: {
+      "click #add1": "add",
+      "click #minus1": "minus",
+      "click #mul2": "mul",
+      "click #division2": "division",
+    },
+    add() {
+      m.updata({ n: m.data.n + 1 });
+    },
+    minus() {
+      m.updata({ n: m.data.n - 1 });
+    },
+    mul() {
+      m.updata({ n: m.data.n * 2 });
+    },
+    division() {
+      m.updata({ n: m.data.n / 2 });
+    },
+  });
+};
+export default c;

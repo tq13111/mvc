@@ -1,30 +1,50 @@
 import "./app2.css";
 import $ from "jquery";
-const app2 = `<section id="app2">
-<ol class="tab-bar">
-  <li>1</li>
-  <li>2</li>
-</ol>
-<ol class="tab-content">
-  <li>内容1</li>
-  <li>内容2</li>
-</ol>
-</section>`;
-$(app2).appendTo($("body>.page"));
-const $bar = $(".tab-bar");
-const $content = $(".tab-content");
+import View from './base/view'
+const eventBus = $(window);
 const localKey = "bar-index";
-const index = localStorage.getItem(localKey) || 0;
-$bar.on("click", "li", (e) => {
-  const $li = $(e.currentTarget);
-  const index = $li.index();
-  localStorage.setItem(localKey, index);
-  $content
-    .children()
-    .eq(index)
-    .addClass("active")
-    .siblings()
-    .removeClass("active");
-  $li.addClass("section").siblings().removeClass("section");
-});
-$bar.children().eq(index).trigger("click");
+const m = {
+  data: {
+    index: parseInt(localStorage.getItem(localKey)) || 0,
+  },
+  updata(data) {
+    Object.assign(m.data, data);
+    eventBus.trigger("m:updatad");
+    localStorage.setItem(localKey, data.index);
+  },
+};
+
+const init = (el)=>{
+  new View({
+    el: el,
+    data:m.data,
+    eventBus:eventBus,
+    html(index) {
+      return `<section id="app2">
+        <ol class="tab-bar">
+          <li class="${index === 0 ? "section" : ""}" data-index='0'>1</li>
+          <li class="${index === 1 ? "section" : ""}" data-index='1'>2</li>
+        </ol>
+        <ol class="tab-content">
+          <li class="${index === 0 ? "active" : ""}">内容1</li>
+          <li class="${index === 1 ? "active" : ""}">内容2</li>
+        </ol>
+        </section>`;
+    },
+    render(data) {
+      const index = data.index
+      if (this.el.length !== 0) this.el.empty();
+      $(this.html(index)).appendTo($(this.el));
+    },
+    events: {
+      "click .tab-bar li": "x",
+    },
+    x(e) {
+      const index = parseInt(e.currentTarget.dataset.index)
+      m.updata({index:index});
+    },
+  });
+} 
+
+export default init;
+
